@@ -1,11 +1,15 @@
 from gpiozero import LED
 import sys
 
-led = LED(21)
+if(len(sys.argv)) <= 2: exit()
+gpio_pin : int = int(sys.argv[1])
+action : str = sys.argv[2]
 
-if sys.argv[1] == "ON": 
+led = LED(gpio_pin)
+
+if action == "ON": 
     led.on()
-    print("LED ON")
-if sys.argv[1] == "OFF": 
+    print(f"LED {gpio_pin} ON")
+else:
     led.off()
-    print("LED OFF")
+    print(f"LED {gpio_pin} OFF")
