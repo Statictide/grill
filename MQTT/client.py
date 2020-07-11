@@ -3,7 +3,7 @@ import time
 
 broker = "test.mosquitto.org" 
 broker = "broker.hivemq.com"
-topic : str = "pi/led/1"
+topic = "dk.daniakollegiet.markgrill"
 
 
 def on_message(client, userdata, message):

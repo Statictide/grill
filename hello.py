@@ -2,13 +2,8 @@ import paho.mqtt.client as mqtt
 from gpiozero import LED
 from time import sleep
 
-
-
 #LED
 led = LED(17)
-
-
-
 
 #MQTT
 broker = "broker.hivemq.com"
@@ -26,3 +21,6 @@ def on_message(client, userdata, message):
 
 client.on_message = on_message
 client.subscribe(topic)
+
+while True:
+    pass
