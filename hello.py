@@ -11,6 +11,7 @@ topic = "dk.daniakollegiet.markgrill"
 
 client = mqtt.Client("pi")
 client.connect(broker)
+print("MQTT connected")
 client.loop_start()
 
 def on_message(client, userdata, message):
