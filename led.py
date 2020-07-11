@@ -8,4 +8,4 @@ if sys.argv[1] == "ON":
     print("LED ON")
 if sys.argv[1] == "OFF": 
     led.off()
-    rint("LED ON")
+    print("LED OFF")
