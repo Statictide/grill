@@ -7,11 +7,10 @@ topic = "dk.daniakollegiet.markgrill"
 
 client = mqtt.Client("controller")
 client.connect(broker)
+print("MQTT connected")
 client.loop_start()
-print("MQTT loop started")
+
 
 client.publish(topic, "ON")
-
-time.sleep(4)
+time.sleep(1)
 client.loop_stop()
-print("MQTT loop stoped")
