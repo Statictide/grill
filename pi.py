@@ -17,8 +17,8 @@ client.loop_start()
 def on_message(client, userdata, message):
     payload = message.payload.decode("utf-8")
     print(f"message recieverd on {message.topic} with message {payload}")
-    #if payload == "ON": led.on()
-    #if payload == "OFF": led.off()
+    if payload == "ON": led.on()
+    if payload == "OFF": led.off()
 
 client.on_message = on_message
 client.subscribe(topic)
