@@ -1,7 +1,7 @@
 from gpiozero import LED
 import sys
 
-led = LED(17)
+led = LED(18)
 
 if sys.argv[1] == "ON": 
     led.on()
