@@ -28,4 +28,8 @@ client.on_disconnect = on_disconnect
 client.subscribe(topic_leds)
 print("Subscribed to topic: " + topic_leds)
 
-client.loop_forever()
+#client.loop_forever()
+while True:
+    print("loop")
+    client.loop()
+    sleep(1)
