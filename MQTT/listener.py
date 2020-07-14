@@ -1,7 +1,5 @@
 import paho.mqtt.client as mqtt
 
-from time import sleep
-
 #MQTT
 broker = "broker.hivemq.com"
 topic = "dk.daniakollegiet.markgrill"
