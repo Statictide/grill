@@ -7,21 +7,23 @@ led = LED(17)
 
 #MQTT
 broker = "broker.hivemq.com"
-topic = "dk.daniakollegiet.markgrill"
+topic_root = "dk.daniakollegiet.markgrill"
+topic_pi = topic_root + "/pi"
+topic_leds = topic_pi + "/led/+"
 
 client = mqtt.Client("pi")
 client.connect(broker)
-print("MQTT connected")
+print("MQTT connected. Listening...")
 client.loop_start()
 
 def on_message(client, userdata, message):
     payload = message.payload.decode("utf-8")
-    print(f"message recieverd on {message.topic} with message {payload}")
-    if payload == "ON": led.on()
-    if payload == "OFF": led.off()
+    print(f"{message.topic}: {payload}")
+    if payload == "TOGGLE": led.toggle()
 
 client.on_message = on_message
-client.subscribe(topic)
+client.subscribe(topic_leds)
+print("Subscribed to topic: " + topic_leds)
 
 while True:
     pass
