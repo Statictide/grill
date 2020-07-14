@@ -9,7 +9,7 @@ led = LED(17)
 broker = "broker.hivemq.com"
 topic_root = "dk.daniakollegiet.markgrill"
 topic_pi = topic_root + "/pi"
-topic_leds = topic_pi + "/led/17"
+topic_leds = topic_pi + "/led/+"
 
 client = mqtt.Client("pi")
 client.connect(broker)
