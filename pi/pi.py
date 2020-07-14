@@ -15,6 +15,8 @@ client = mqtt.Client("pi")
 client.connect(broker)
 
 def on_message(client, userdata, message):
+    print(type(message))
+    print(type(message.topic))
     topic = message.topic.decode("utf-8")
     payload = message.payload.decode("utf-8")
     print(f"{message.topic}: {payload}")
