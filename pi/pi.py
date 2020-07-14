@@ -17,6 +17,7 @@ print("MQTT connected. Listening...")
 client.loop_start()
 
 def on_message(client, userdata, message):
+    print("Decoding message...")
     payload = message.payload.decode("utf-8")
     print(f"{message.topic}: {payload}")
     if payload == "TOGGLE": led.toggle()
