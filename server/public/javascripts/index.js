@@ -1,5 +1,5 @@
 // Create a client instance
-client = new Paho.MQTT.Client("broker.hivemq.com", Number("8000"), "clientId");
+client = new Paho.MQTT.Client("broker.hivemq.com", Number("8000"), "web");
 
 // set callback handlers
 client.onConnectionLost = onConnectionLost;
@@ -8,13 +8,13 @@ client.onMessageArrived = onMessageArrived;
 // connect the client
 client.connect({onSuccess:onConnect});
 
-topic = "dk.daniakollegiet.markgrill"
+topic_root = "dk.daniakollegiet.markgrill"
 // called when the client connects
 function onConnect() {
   // Once a connection has been made, make a subscription and send a message.
   console.log("onConnect");
-  client.subscribe(topic);
-  publish(topic, "Hello");
+  client.subscribe(topic_root + "/#");
+  publish(topic_root, "Hello");
 }
 
 function publish(topicStr, payloadStr){
@@ -32,5 +32,5 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-  console.log("onMessageArrived:"+message.payloadString);
+  console.log(message.destinationName + ":" + message.payloadString);
 }
