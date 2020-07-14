@@ -19,8 +19,8 @@ def on_message(client, userdata, message):
     payload = message.payload.decode("utf-8")
     print(f"{message.topic}: {payload}")
 
-    pin = int(topic.split("/")[-1])
-    if payload == "TOGGLE": LED(pin).toggle()
+    #pin = int(topic.split("/")[-1])
+    if payload == "TOGGLE": LED(17).toggle()
 
 def on_connect(client, userdata, flags, rc):
     print("Connected")
