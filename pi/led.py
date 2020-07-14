@@ -1,6 +1,6 @@
 from gpiozero import LED
 import sys
-import sleep from time
+import time
 
 if(len(sys.argv)) <= 1: exit()  #At least 1 argument
 gpio_pin : int = int(sys.argv[1])
@@ -8,9 +8,9 @@ gpio_pin : int = int(sys.argv[1])
 led = LED(gpio_pin)
 led.on()
 
-sleep(4)
+timpe.sleep(4)
 
 led = LED(18)
 led.on()
 
-sleep(4)
+time.sleep(4)
