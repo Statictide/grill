@@ -17,10 +17,11 @@ client.connect(broker)
 def on_message(client, userdata, message):
     payload = message.payload.decode("utf-8")
     print(f"{message.topic}: {payload}")
-    #if payload == "TOGGLE": led.toggle()
+    if payload == "TOGGLE": led.toggle()
 
 def on_connect(client, userdata, flags, rc):
     print("Connected")
+    client.subscribe(topic_leds)
 
 def on_disconnect(client, userdata, rc):
     print("Disconnected")
@@ -29,7 +30,6 @@ def on_disconnect(client, userdata, rc):
 client.on_message = on_message
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
-client.subscribe(topic_leds)
-print("Subscribed to topic: " + topic_leds)
+
 
 client.loop_forever()
