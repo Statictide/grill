@@ -3,7 +3,7 @@ from gpiozero import LED
 from time import sleep
 
 #LED
-led = LED(17)
+led2 = LED(2)
 
 #MQTT
 broker = "broker.hivemq.com"
@@ -20,7 +20,9 @@ def on_message(client, userdata, message):
     print(f"{topicStr}: {payloadStr}")
 
     pin = int(topicStr.split("/")[-1])
-    if payloadStr == "TOGGLE": LED(17).toggle()
+
+    if pin == 2 and payloadStr == "TOGGLE": 
+        led2.toggle()
 
 def on_connect(client, userdata, flags, rc):
     print("Connected")
