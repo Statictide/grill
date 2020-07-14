@@ -12,12 +12,15 @@ topic_pi = topic_root + "/pi"
 topic_leds = topic_pi + "/led/+"
 
 client = mqtt.Client("pi")
-client.connect(broker, keepalive=60)
+client.connect(broker)
 
 def on_message(client, userdata, message):
+    topic = message.topic.decode("utf-8")
     payload = message.payload.decode("utf-8")
     print(f"{message.topic}: {payload}")
-    if payload == "TOGGLE": led.toggle()
+
+    pin = int(topic.split("/")[-1])
+    if payload == "TOGGLE": LED(pin).toggle()
 
 def on_connect(client, userdata, flags, rc):
     print("Connected")
