@@ -19,7 +19,12 @@ def on_message(client, userdata, message):
     print(f"{message.topic}: {payload}")
     if payload == "TOGGLE": led.toggle()
 
+def on_disconnect(){
+    print("disconnected")
+}
+
 client.on_message = on_message
+client.on_disconnect = on_disconnect
 client.subscribe(topic_leds)
 print("Subscribed to topic: " + topic_leds)
 
