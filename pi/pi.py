@@ -13,11 +13,8 @@ topic_leds = topic_pi + "/led/+"
 
 client = mqtt.Client("pi")
 client.connect(broker)
-print("MQTT connected. Listening...")
-client.loop_start()
 
 def on_message(client, userdata, message):
-    print("Decoding message...")
     payload = message.payload.decode("utf-8")
     print(f"{message.topic}: {payload}")
     if payload == "TOGGLE": led.toggle()
@@ -26,6 +23,4 @@ client.on_message = on_message
 client.subscribe(topic_leds)
 print("Subscribed to topic: " + topic_leds)
 
-while True:
-    sleep(0.1)
-    pass
+client.loop_forever()
