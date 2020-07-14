@@ -8,11 +8,11 @@ led = LED(17)
 #MQTT
 broker = "broker.hivemq.com"
 topic_root = "dk.daniakollegiet.markgrill"
-topic_pi = topic_root + "/pi"
+topic_pi = topic_root + "/pi"d
 topic_leds = topic_pi + "/led/+"
 
 client = mqtt.Client("pi")
-client.connect(broker)
+client.connect(broker, keepalive=60)
 
 def on_message(client, userdata, message):
     payload = message.payload.decode("utf-8")
