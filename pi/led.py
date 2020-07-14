@@ -8,7 +8,7 @@ gpio_pin : int = int(sys.argv[1])
 led = LED(gpio_pin)
 led.on()
 
-timpe.sleep(4)
+time.sleep(4)
 
 led = LED(18)
 led.on()
