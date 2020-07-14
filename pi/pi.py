@@ -26,4 +26,5 @@ client.subscribe(topic_leds)
 print("Subscribed to topic: " + topic_leds)
 
 while True:
+    sleep(0.1)
     pass
