@@ -13,3 +13,5 @@ if action == "ON":
 else:
     led.off()
     print(f"LED {gpio_pin} OFF")
+
+while True: pass
