@@ -1,8 +1,10 @@
 extends layout
 
 block scripts
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js')
-  script(src='javascripts/index.js')
 
 block content
-  button(onclick = "publish('dk.daniakollegiet.markgrill/pi/led/17', 'TOGGLE')") Toggle LED
+    h1 Please log in
+    form(action="/users")
+        label Phone number
+        input(type="tel" placeholder="12345678")
+        input(type="submit")
