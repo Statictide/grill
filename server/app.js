@@ -2,10 +2,8 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var grillRouter = require('./routes/grill');
 var idRouter = require('./routes/id');
-var sucessRouter = require('./routes/sucess');
 
 var app = express();
 
@@ -17,18 +15,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use((req, res, next) => {
+  console.log("Request recieved at " + Date.now());
+  next();
+});
+
+app.get("/", (req, res, next) => {
+  res.send("<a href='/grill'>grill</>");
+});
+
+app.use('/grill', grillRouter);
 app.use('/id', idRouter);
-app.use('/sucess', sucessRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

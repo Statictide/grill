@@ -4,7 +4,11 @@ block scripts
 
 block content
     h1 Please log in
-    form(action="/users")
-        label Phone number
-        input(type="tel" placeholder="12345678")
+    form(action="/", method="GET")
+        //label(for="tel") Phone number
+        //input#tel(type="tel", name="tel", placeholder="12345678")
+
+        lable(for="email") E-mail
+        input(type="email", id="email", name="email", placeholder="JohnDoe@example.com")  
+
         input(type="submit")

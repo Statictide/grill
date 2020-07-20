@@ -3,14 +3,14 @@ extends layout
 block scripts
   script(src="https://js.stripe.com/v3/")
   script(src='https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js')
-  script(src='javascripts/index.js')
+  script(src='javascripts/test.js')
 
 block content
-  button(onclick="publish('dk.daniakollegiet.markgrill/pi/led/17', 'TOGGLE')") Toggle LED
+  button Toggle LED
   br
-  a(href="/id") id
 
+  a(href="/id") id
   br
-  br
+
   button#checkout-button Betal
 
