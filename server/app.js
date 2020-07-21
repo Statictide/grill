@@ -2,9 +2,14 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var multer = require('multer');
+var upload = multer();
+var session = require('express-session');
 
-var grillRouter = require('./routes/grill');
+var thingsRouter = require('./routes/things');
+var authRouter = require('./routes/auth');
 var idRouter = require('./routes/id');
+//const { appendFile } = require('fs');
 
 var app = express();
 
@@ -14,19 +19,28 @@ app.set('view engine', 'pug');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
+app.use(upload.array());
+app.use(session({
+  secret: "Your secret key",
+  resave: false,
+  saveUninitialized: false
+  //store: sessionStore, // connect-mongo session store
+  }));
 
+//Logging
 app.use((req, res, next) => {
-  console.log("Request recieved at " + Date.now());
+  var id = "undefined";
+  if(req.session.user){
+    id = req.session.user.id;
+  }
+  console.log(`${req.method} request to ${req.url} from ${id}`);
   next();
 });
 
-app.get("/", (req, res, next) => {
-  res.send("<a href='/grill'>grill</>");
-});
-
-app.use('/grill', grillRouter);
+app.use('/', thingsRouter);
+app.use("/", authRouter);
 app.use('/id', idRouter);
 
 // catch 404 and forward to error handler

@@ -1,0 +1,11 @@
+html
+    head
+        title Login
+    body
+        h1 Login or create new user
+        form(action="/login", method = "POST")
+            if(message) 
+                h4 #{message}
+            lable(for="id") Please enter a unique id
+            input(name = "id" type = "id" required placeholder = "John Doe" autofocus)
+            button(type = "Submit") Login/Signup

@@ -3,12 +3,13 @@ extends layout
 block scripts
 
 block content
-    h1 Please log in
-    form(action="/", method="GET")
-        //label(for="tel") Phone number
-        //input#tel(type="tel", name="tel", placeholder="12345678")
-
-        lable(for="email") E-mail
-        input(type="email", id="email", name="email", placeholder="JohnDoe@example.com")  
-
-        input(type="submit")
+    h1 The grill is available for use
+    - if(!user) 
+        h4 Please log in
+    if(user)
+        - if(user.isRentingGrill)
+            button Open box
+        - else
+            h4 Please rent the grill to open the box
+            h4 The price is 1kr
+            button Pay

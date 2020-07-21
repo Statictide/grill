@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
 
     const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],//, 'ideal'],
+    payment_method_types: ['card'],
     line_items: [{
         price_data: {
         currency: 'eur',
