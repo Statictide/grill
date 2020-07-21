@@ -12,17 +12,17 @@ router.get('/', async (req, res) => {
     payment_method_types: ['card'],
     line_items: [{
         price_data: {
-        currency: 'eur',
-        product_data: {
-            name: 'T-shirt',
-        },
-        unit_amount: 2000,
+            currency: 'dkk',
+            product_data: {
+                name: 'Grill deposit',
+            },
+            unit_amount: 500,
         },
         quantity: 1,
     }],
     mode: 'payment',
     success_url:'http://localhost:3000/sucess',
-    cancel_url: 'https://example.com/cancel',
+    cancel_url: 'http://localhost:3000/',
     });
 
 

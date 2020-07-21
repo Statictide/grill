@@ -40,7 +40,6 @@ function onMessageArrived(message) {
 
 var stripe = Stripe('pk_test_51H4hdCKXVCnO2pJVsgZiUI6FRFLuypE6LfiNdOKPMNqdnScPRFGYgNBXpX71792TcgPQdby3VVHeQ65od6mKiTQ100ctrEddPA');
 
-
 var response = fetch('/id')
   .then(function(response) {
     return response.json();
