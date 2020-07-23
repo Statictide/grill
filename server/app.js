@@ -6,6 +6,8 @@ var bodyParser = require('body-parser')
 var multer = require('multer');
 var upload = multer();
 var session = require('express-session');
+const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
+
 
 var thingsRouter = require('./routes/things');
 var authRouter = require('./routes/auth');
@@ -28,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
   //store: sessionStore, // connect-mongo session store
-  }));
+}));
 
 // Logging 
 app.use((req, res, next) => {
@@ -36,25 +38,26 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use('/', thingsRouter);
 app.use("/", authRouter);
 app.use('/id', idRouter);
 
 const endpointSecret = "whsec_dARxlvwIIWkZsOZDN7w5zfgF3lCHujB4";
+console.log("start");
 
 // Match the raw body to content type application/json
 app.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
-  console.log("1");
-  const sig = request.headers['stripe-signature'];
-  console.log("2");
-
+  const sig = req.headers['stripe-signature'];
+  
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     console.log("Failed to build event");
-    return response.status(400).send(`Webhook Error: ${err.message}`);
+    console.log(err);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   console.log("3");
@@ -69,7 +72,7 @@ app.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
   }
 
   // Return a response to acknowledge receipt of the event
-  response.json({received: true});
+  res.json({received: true});
 });
 
 function handleCheckoutSession(session){
