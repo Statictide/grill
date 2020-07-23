@@ -43,7 +43,7 @@ app.use('/', thingsRouter);
 app.use("/", authRouter);
 app.use('/id', idRouter);
 
-const endpointSecret = "whsec_dARxlvwIIWkZsOZDN7w5zfgF3lCHujB4";
+const endpointSecret = "whsec_sCFRdbZbg7kK79KOX8FhrgLO9wAI8K2l";
 console.log("start");
 
 // Match the raw body to content type application/json
