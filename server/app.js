@@ -43,16 +43,22 @@ app.use('/id', idRouter);
 const endpointSecret = "whsec_dARxlvwIIWkZsOZDN7w5zfgF3lCHujB4";
 
 // Match the raw body to content type application/json
-app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
+app.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
+  console.log("1");
   const sig = request.headers['stripe-signature'];
+  console.log("2");
 
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
   } catch (err) {
+    console.log("Failed to build event");
     return response.status(400).send(`Webhook Error: ${err.message}`);
   }
+
+  console.log("3");
+
 
   // Handle the checkout.session.completed event
   if (event.type === 'checkout.session.completed') {
@@ -66,6 +72,9 @@ app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, respo
   response.json({received: true});
 });
 
+function handleCheckoutSession(session){
+  console.log(session);
+}
 
 
 
