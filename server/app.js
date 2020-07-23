@@ -29,19 +29,52 @@ app.use(session({
   //store: sessionStore, // connect-mongo session store
   }));
 
-//Logging
+// Logging 
 app.use((req, res, next) => {
-  var id = "undefined";
-  if(req.session.user){
-    id = req.session.user.id;
-  }
-  console.log(`${req.method} request to ${req.url} from ${id}`);
+  console.log(`${req.method} request to ${req.url}`);
   next();
 });
 
 app.use('/', thingsRouter);
 app.use("/", authRouter);
 app.use('/id', idRouter);
+
+const endpointSecret = "whsec_dARxlvwIIWkZsOZDN7w5zfgF3lCHujB4";
+
+// Match the raw body to content type application/json
+app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    return response.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the checkout.session.completed event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+
+    // Fulfill the purchase...
+    handleCheckoutSession(session);
+  }
+
+  // Return a response to acknowledge receipt of the event
+  response.json({received: true});
+});
+
+
+
+
+
+
+
+
+
+
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
