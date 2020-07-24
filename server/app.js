@@ -12,6 +12,7 @@ const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm6
 var thingsRouter = require('./routes/things');
 var authRouter = require('./routes/auth');
 var idRouter = require('./routes/id');
+var webhookRouter = require('./routes/webhook');
 //const { appendFile } = require('fs');
 
 var app = express();
@@ -20,10 +21,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//Webhook needs the raw body
+app.use('/webhook', webhookRouter);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser());
 app.use(upload.array());
 app.use(session({
   secret: "Your secret key",
@@ -32,56 +36,16 @@ app.use(session({
   //store: sessionStore, // connect-mongo session store
 }));
 
+
 // Logging 
 app.use((req, res, next) => {
   console.log(`${req.method} request to ${req.url}`);
   next();
 });
 
-
 app.use('/', thingsRouter);
 app.use("/", authRouter);
 app.use('/id', idRouter);
-
-const endpointSecret = "whsec_sCFRdbZbg7kK79KOX8FhrgLO9wAI8K2l";
-console.log("start");
-
-// Match the raw body to content type application/json
-app.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err) {
-    console.log("Failed to build event");
-    console.log(err);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  console.log("3");
-
-
-  // Handle the checkout.session.completed event
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-
-    // Fulfill the purchase...
-    handleCheckoutSession(session);
-  }
-
-  // Return a response to acknowledge receipt of the event
-  res.json({received: true});
-});
-
-function handleCheckoutSession(session){
-  console.log(session);
-}
-
-
-
-
 
 
 
