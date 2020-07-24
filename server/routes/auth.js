@@ -5,13 +5,16 @@ var Users = [];
 
 // Login
 router.get("/login", (req, res) => {
-  res.render("login", {user: req.session.user});
+  res.render("login", {title: "Login", user: req.session.user});
 });
 
 router.post('/login', (req, res) => {
-    if(!req.body.id){
-        res.render("login", {message: "Please enter your id", user: req.session.user})
+    if(!req.body.id) {
+        res.render("login", {
+            message: "Please enter your id", 
+            user: req.session.user})
     }
+
     // Look for existing user, login if match found
     Users.filter((user) => {
         if(user.id == req.body.id){
