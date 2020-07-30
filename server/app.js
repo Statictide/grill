@@ -21,10 +21,8 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-//Webhook needs the raw body
-app.use('/webhook', webhookRouter);
 
-app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: false }));
 //  app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,18 +34,20 @@ app.use(session({
   //store: sessionStore, // connect-mongo session store
 }));
 
-
 // Logging 
 app.use((req, res, next) => {
   console.log(`${req.method} request to ${req.url}`);
   next();
 });
 
+//Webhook needs the raw body
+app.use('/webhook', webhookRouter);
+
+app.use(bodyParser.json());
+
 app.use('/', thingsRouter);
 app.use("/", authRouter);
 app.use('/id', idRouter);
-
-
 
 
 
