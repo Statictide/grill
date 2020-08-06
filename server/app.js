@@ -7,20 +7,23 @@ var multer = require('multer');
 var upload = multer();
 var session = require('express-session');
 const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
+var mongoose = require('mongoose');
 
+//Set up default mongoose connection
+const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
+//Routes
 var thingsRouter = require('./routes/things');
 var authRouter = require('./routes/auth');
 var idRouter = require('./routes/id');
 var webhookRouter = require('./routes/webhook');
-//const { appendFile } = require('fs');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,7 +45,6 @@ app.use((req, res, next) => {
 
 //Webhook needs the raw body
 app.use('/webhook', webhookRouter);
-
 app.use(bodyParser.json());
 
 app.use('/', thingsRouter);
