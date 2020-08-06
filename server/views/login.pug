@@ -5,6 +5,6 @@ block content
     form(action="/login", method = "POST")
         if(message) 
             h4 #{message}
-        lable(for="id") Please enter a unique id
-        input(name = "id" type = "id" required placeholder = "John Doe" autofocus)
+        lable(for="username") Please enter a unique username
+        input(name = "username" type = "text" required placeholder = "John Doe" autofocus)
         button(type = "Submit") Login/Signup

@@ -8,19 +8,22 @@ router.get("/login", (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    if(!req.body.id) {
+    if(!req.body.username) {
         return res.render("login", {
-            message: "Please enter your id", 
+            message: "Please enter your username", 
             user: req.session.user})
     }
     
-    UserFactory.getUser(req).then((user) => {
-        // In no user exists, create it.
-        if (!user) { UserFactory.postUser(req) }
+    UserFactory.getUser(req).then(
+        user => {
+            // In no user exists, create it.
+            if (!user) { UserFactory.postUser(req) }
 
-        req.session.user = {id: req.body.id};
-        return res.redirect("/"); 
-    }, (err) => console.log(err));
+            req.session.user = {username: req.body.username};
+            return res.redirect("/"); 
+        }, 
+        err => console.log(err)
+    );
 });
 
 router.get('/logout', (req, res) => {
