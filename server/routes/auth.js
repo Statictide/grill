@@ -24,8 +24,8 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy()
-  res.redirect('/');
+    req.session.destroy()
+    res.redirect('/');
 });
 
 router.get("/users", (req, res) => {
