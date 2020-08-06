@@ -22,7 +22,7 @@ function getUsers() {
 }
 
 function getUser(req) {
-    return new Promise( function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         var query = User.findOne(req.body);
         query.exec().then(resolve, reject);
     });
