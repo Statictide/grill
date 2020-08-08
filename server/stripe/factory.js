@@ -8,7 +8,8 @@ exports.createCustomer = createCustomer;
 function getGrillCheckoutSessionId(user) {
     return new Promise((resolve, reject) => {
         stripe.checkout.sessions.create({
-            client_reference_id: user.id,
+            client_reference_id: user.username,
+            customer: user.stripe_customer,
             payment_method_types: ['card'],
             line_items: [{
                 price_data: {
@@ -36,7 +37,7 @@ function createCustomer(username) {
     return new Promise((resolve, reject) => {
         stripe.customers.create(
             {
-                description: 'My First Test Customer (created for API docs)',
+                description: username,
                 metadata: {username: username},
             },
             function(err, customer) {

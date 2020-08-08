@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 
 app.use('/', thingsRouter);
 app.use("/", authRouter);
-app.use('/id', idRouter);
+app.use('/', idRouter);
 
 
 

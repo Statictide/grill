@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/sucess', (req, res) => {
+router.get('/success', (req, res) => {
     res.render('sucess', {user: req.session.user});
 });
 
