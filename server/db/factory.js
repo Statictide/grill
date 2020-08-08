@@ -9,10 +9,13 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {console.log("we're connected!")});
 
 
-exports.getUsers = getUsers;
-exports.getUser = getUser;
-exports.postUser = postUser;
-exports.getGrill = getGrill;
+exports = {
+    getUsers,
+    getUser,
+    postUser,
+    updateGrillRenter,
+    getGrill
+};
 
 function getUsers() {
     return new Promise((resolve, reject) => {
@@ -47,9 +50,28 @@ function postUser(req) {
     });
 }
 
+async function updateGrillRenter(user) {
+    var user, grill;
+    var grillPromise = DBFactory.getGrill();
+    var userPromise = DBFactory.getUser(user)
+
+    grillPromise.then(
+        g => grill = g, 
+        err => next(err)
+    );
+    userPromise.then(
+        u => user = u,
+        err => next(err)
+    )
+
+    await grillPromise;
+    await userPromise;
+
+    grill.renter = user;
+    grill.save();
+}
+
 function getGrill(name = "dania1") {
-    return new Promise((resolve, reject) => {
-        var query = Grill.findOne({name: name});
-        query.exec().then(resolve, reject);
-    });
+    var promise = Grill.findOne({name: name}).exec();
+    return promise;
 }

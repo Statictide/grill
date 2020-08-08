@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var UserFactory = require('./../db/user.factory');
+var Factory = require('../db/factory');
 
 // Login
 router.get("/login", (req, res) => {
@@ -14,10 +14,10 @@ router.post('/login', (req, res) => {
             user: req.session.user})
     }
     
-    UserFactory.getUser(req).then(
+    Factory.getUser(req).then(
         user => {
             // In no user exists, create it.
-            if (!user) { UserFactory.postUser(req) }
+            if (!user) { Factory.postUser(req) }
 
             req.session.user = {username: req.body.username};
             return res.redirect("/"); 
@@ -32,10 +32,10 @@ router.get('/logout', (req, res) => {
 });
 
 router.get("/users", (req, res) => {
-    UserFactory.getUsers().then(users => {
-        res.json(users);
-
-    }, err => console.log(err) );
+    Factory.getUsers().then(
+        users => res.json(users), 
+        err => console.log(err)
+    );
 })
 
 module.exports = router;

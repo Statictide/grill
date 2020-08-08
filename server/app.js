@@ -39,7 +39,7 @@ app.use(session({
 
 // Logging 
 app.use((req, res, next) => {
-  console.log(`${req.method} request to ${req.url}`);
+  console.log(`${req.method} request to ${req.url} from user ${JSON.stringify(req.session.user)}`);
   next();
 });
 
