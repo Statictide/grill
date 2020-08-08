@@ -1,10 +1,9 @@
-const { HttpError } = require('http-errors');
-
 // Set your secret key. Remember to switch to your live secret key in production!
 const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
 
 exports.getGrillCheckoutSessionId = getGrillCheckoutSessionId;
 exports.createCustomer = createCustomer;
+
 //Session.user
 function getGrillCheckoutSessionId(user) {
     return new Promise((resolve, reject) => {
@@ -22,7 +21,7 @@ function getGrillCheckoutSessionId(user) {
                 quantity: 1,
             }],
             mode: 'payment',
-            success_url:'http://localhost:3000/sucess',
+            success_url:'http://localhost:3000/success',
             cancel_url: 'http://localhost:3000/',
         },
         function (err, session) {
@@ -32,12 +31,13 @@ function getGrillCheckoutSessionId(user) {
     });
 }
 
-async function createCustomer(user) {
+// User = {username}
+function createCustomer(username) {
     return new Promise((resolve, reject) => {
         stripe.customers.create(
             {
                 description: 'My First Test Customer (created for API docs)',
-                metadata: {username: user.username},
+                metadata: {username: username},
             },
             function(err, customer) {
                 if (err) {

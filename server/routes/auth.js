@@ -1,40 +1,63 @@
 var express = require('express');
 var router = express.Router();
-var Factory = require('../db/factory');
+var DBFactory = require('../db/factory');
+var StripeFactory = require('../stripe/factory');
+var HttpError = require('http-errors');
 
 // Login
 router.get("/login", (req, res) => {
   res.render("login", {title: "Login", user: req.session.user});
 });
 
-router.post('/login', (req, res) => {
+//Req body should contain username
+router.post('/login', (req, res, next) => {
+    // username must be set
     if(!req.body.username) {
         return res.render("login", {
             message: "Please enter your username", 
             user: req.session.user})
     }
     
-    Factory.getUser(req).then(
-        user => {
-            // In no user exists, create it.
-            if (!user) { Factory.postUser(req) }
-
-            req.session.user = {username: req.body.username};
-            return res.redirect("/"); 
-        }, 
-        err => console.log(err)
-    );
+    DBFactory.getUser(req)
+    // If user is found, pass it on. Otherwise create user first
+    .then(userModel => {
+        if (userModel) 
+            return userModel;
+        else 
+            return createUser(req)
+    })
+    .then(user => {
+        req.session.user = {username: user.username, stripe_customer_id: user.stripeCustomer};
+        return res.redirect("/"); 
+    })
+    .catch(err => {
+        next(HttpError(500, err.message));
+    });
 });
+
+// Requires req.body.username
+function createUser(req) {
+    // Create stripe customer
+    return StripeFactory.createCustomer(req.body.username)
+    .then(customer => {
+        return {
+            username: req.body.username, 
+            stripe_customer_id: customer.id
+        };
+    })
+    // Post user to database
+    .then(user => DBFactory.postUser(user)) //This promise is dynamically inserted into the chain
+}
 
 router.get('/logout', (req, res) => {
     req.session.destroy()
     res.redirect('/');
 });
 
-router.get("/users", (req, res) => {
-    Factory.getUsers().then(
+router.get("/users", (req, res, next) => {
+    DBFactory.getUsers().then(
         users => res.json(users), 
-        err => console.log(err)
+        err => next(HttpError(500, err.message))
     );
 })
 

@@ -4,48 +4,41 @@ var User = require('./userSchema.js');
 var Grill = require('./grillSchema.js');
 
 //Bind connection to error event (to get notification of connection errors)
+//Set up default mongoose connection
+const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {console.log("we're connected!")});
+db.once('open', () => {console.log("MongoDB connected!")});
 
-
-exports = {
-    getUsers,
-    getUser,
-    postUser,
-    updateGrillRenter,
-    getGrill
-};
+exports.getUsers = getUsers;
+exports.getUser = getUser;
+exports.postUser = postUser;
+exports.updateGrillRenter = updateGrillRenter;
+exports.getGrill = getGrill;
 
 function getUsers() {
-    return new Promise((resolve, reject) => {
-        var query = User.find({});
-        query.exec().then(resolve, reject);
-    });
+    var promise = User.find({}).exec();
+    return promise;
 }
 
 function getUser(req) {
-    return new Promise((resolve, reject) => {
-        var query = User.findOne(req.body);
-        query.exec().then(resolve, reject);
-    });
+    var promise = User.findOne(req.body).exec();
+    return promise;
 }
-  
-  
-  
-function postUser(req) {
-    return new Promise((resolve, reject) => {
-        // Creates a new User based on the Mongoose schema and the post body
-        var newUser = new User(req.body);
 
-        // New User is saved in the db.
+function postUser(user) {
+    return new Promise((resolve, reject) => {
+        var newUser = new User(user);
+
         newUser.save(err => {
-            console.log('err', err);
             if (err) {
-                return reject({err : 'Error while saving new user'});
+                console.log("Error in posting user to database. db.factory.js")
+                reject(err);
+            } else {
+                return resolve(newUser);
             }
-            // If no errors are found, it responds with a JSON of the new users
-            return resolve(req.body);
         });
     });
 }

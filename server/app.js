@@ -1,17 +1,10 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser')
 var multer = require('multer');
 var upload = multer();
 var session = require('express-session');
-const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
-var mongoose = require('mongoose');
-
-//Set up default mongoose connection
-const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Routes
 var thingsRouter = require('./routes/things');
@@ -27,7 +20,6 @@ app.set('view engine', 'pug');
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
-//  app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(upload.array());
 app.use(session({
@@ -69,6 +61,9 @@ app.use((err, req, res, next) => {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+
+  console.log(err.message);
+  console.log(err.stack);
 });
 
 module.exports = app;

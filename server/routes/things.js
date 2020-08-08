@@ -42,7 +42,7 @@ router.get("/test", (req, res) => {
             req.session.user.stripeCustomerId = customer.id
             res.json(customer);
         },
-        err => next(HttpError(503), "Problems with stripe")
+        err => next(HttpError(503), err.message)
     )
 })
 
