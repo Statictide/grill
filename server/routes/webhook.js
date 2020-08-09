@@ -14,29 +14,30 @@ router.post('/', bodyParser.raw({type: 'application/json'}), (req, res) => {
     
     let event;
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     } catch (err) {
-      console.log("Failed to build event");
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+        console.log("Failed to build event");
+        return res.status(400).send(`Webhook Error: ${err.message}`);
     }
   
     console.log(`Webhook: ${event.type}`)
   
     // Handle the checkout.session.completed event
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-  
-      // Fulfill the purchase...
-      handleCheckoutSession(session);
+        const session = event.data.object;
+    
+        // Fulfill the purchase...
+        handleCheckoutSession(session);
     }
-  
+
     // Return a response to acknowledge receipt of the event
     res.json({received: true});
-  });
+});
 
-  function handleCheckoutSession(session){
+function handleCheckoutSession(session){
     console.log(`User: ${session.client_reference_id} has completed payment`);
-  }
+    
+}
   
 
 module.exports = router;
