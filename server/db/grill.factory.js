@@ -13,12 +13,13 @@ db.once('open', () => {console.log("MongoDB connected!")});
 exports.updateGrillRenter = updateGrillRenter;
 exports.getGrill = getGrill;
 
-async function updateGrillRenter(user) {
+async function updateGrillRenter(grill = {name: "dania1"}, user) {
+    //Get grill
     var user, grill;
-    grillPromise.then(
-        g => grill = g, 
-        err => next(err)
-    );
+    grillPromise = getGrill();
+
+    grillPromise.then(g => grill = g);
+
     userPromise.then(
         u => user = u,
         err => next(err)
