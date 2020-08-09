@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var DBFactory = require('../db/factory');
+var DBUserFactory = require('../db/user.factory');
 var StripeFactory = require('../stripe/factory');
 var HttpError = require('http-errors');
 
@@ -18,7 +18,7 @@ router.post('/login', (req, res, next) => {
             user: req.session.user})
     }
     
-    DBFactory.getUser(req)
+    DBUserFactory.getUser(req)
     // If user is found, pass it on. Otherwise create user first
     .then(userModel => {
         if (userModel) 
@@ -46,7 +46,7 @@ function createUser(req) {
         };
     })
     // Post user to database
-    .then(user => DBFactory.postUser(user)) //This promise is dynamically inserted into the chain
+    .then(user => DBUserFactory.postUser(user)) //This promise is dynamically inserted into the chain
 }
 
 router.get('/logout', (req, res) => {
@@ -55,7 +55,7 @@ router.get('/logout', (req, res) => {
 });
 
 router.get("/users", (req, res, next) => {
-    DBFactory.getUsers().then(
+    DBUserFactory.getUsers().then(
         users => res.json(users), 
         err => next(HttpError(500, err.message))
     );

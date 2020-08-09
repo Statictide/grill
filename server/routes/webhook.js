@@ -36,7 +36,7 @@ router.post('/', bodyParser.raw({type: 'application/json'}), (req, res) => {
 
 function handleCheckoutSession(session){
     console.log(`User: ${session.client_reference_id} has completed payment`);
-    
+    // Post to grill that it is rented
 }
   
 
