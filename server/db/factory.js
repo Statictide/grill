@@ -1,11 +1,13 @@
 //https://stackoverflow.com/questions/40548559/connecting-to-mongodb-using-mongoose-in-multiple-files
 var mongoose = require('mongoose')
-var DBUserFactory = require('./user.factory')
-var Grill = require('./grillSchema.js')
+var {Grill, User} = require('./schema.js')
 
 exports.clearGrillRenter = clearGrillRenter;
 exports.updateGrillRenter = updateGrillRenter;
 exports.getGrill = getGrill;
+exports.getUser = getUser;
+exports.getUsers = getUsers;
+exports.postUser = postUser;
 
 function clearGrillRenter(grill) {
     return getGrill(grill)
@@ -20,7 +22,7 @@ function updateGrillRenter(grill, user) {
     return Promise.all([
         //Get grill and user
         getGrill(grill),
-        DBUserFactory.getUser(user)])
+        getUser(user)])
     .then(values => {
         //Then update database with new renter
         grillModel = values[0]
@@ -34,4 +36,29 @@ function updateGrillRenter(grill, user) {
 function getGrill(grill = {name: "dania1"}) {
     var promise = Grill.findOne(grill).exec()
     return promise;
+}
+
+function getUsers() {
+    var promise = User.find({}).exec();
+    return promise;
+}
+
+function getUser(req) {
+    var promise = User.findOne(req.body).exec();
+    return promise;
+}
+
+function postUser(user) {
+    return new Promise((resolve, reject) => {
+        var newUser = new User(user);
+
+        newUser.save(err => {
+            if (err) {
+                console.log("Error in posting user to database. db.factory.js")
+                reject(err);
+            } else {
+                return resolve(newUser);
+            }
+        });
+    });
 }

@@ -1,11 +1,15 @@
 var express = require('express');
 var router = express.Router();
-var DBUserFactory = require('../db/user.factory');
-var DBGrillFactory = require('../db/grill.factory');
+var DBFactory = require('../db/factory');
 var StripeFactory = require('../stripe/factory');
 var HttpError = require('http-errors');
 
 router.get('/', (req, res) => {
+    var user = req.session.user
+    var grill = {name: "dania1"}
+    if (user) {
+
+    }
     res.render('index', {user: req.session.user});
 });
 
@@ -15,13 +19,13 @@ router.get('/success', (req, res) => {
 });
 
 router.get("/grills", (req, res) => {
-    DBGrillFactory.getGrill("dania1")
+    DBFactory.getGrill("dania1")
     .then(grill => res.json(grill))
     .catch(err => console.log(err));
 });
 
 router.get('/clear', (req, res, next) => {
-    DBGrillFactory.clearGrillRenter({name: "dania1"})
+    DBFactory.clearGrillRenter({name: "dania1"})
     .then(res.send("Sucessfully cleared"))
     .catch(err => next(HttpError(500, err.message)))
 })

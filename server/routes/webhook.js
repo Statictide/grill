@@ -1,5 +1,5 @@
 var express = require('express')
-var DBGrillFactory = require('../db/grill.factory')
+var DBGrillFactory = require('../db/factory')
 var router = express.Router()
 
 // Set your secret key. Remember to switch to your live secret key in production!
