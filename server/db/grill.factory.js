@@ -1,36 +1,27 @@
 //https://stackoverflow.com/questions/40548559/connecting-to-mongodb-using-mongoose-in-multiple-files
-var mongoose = require('mongoose');
-var Grill = require('./grillSchema.js');
-
-//Set up default mongoose connection
-const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {console.log("MongoDB connected!")});
+var mongoose = require('mongoose')
+var DBUserFactory = require('./user.factory')
+var Grill = require('./grillSchema.js')
 
 exports.updateGrillRenter = updateGrillRenter;
 exports.getGrill = getGrill;
 
-async function updateGrillRenter(grill = {name: "dania1"}, user) {
-    //Get grill
-    var user, grill;
-    grillPromise = getGrill();
+//grill.name, user.username should both exist
+async function updateGrillRenter(grill, user) {
+    return Promise.all([
+        //Get grill and user
+        getGrill(grill),
+        DBUserFactory.getUser(user)])
+    .then(values => {
+        //Then update database with new renter
+        grillModel = values[0]
+        userModel = values[1]
 
-    grillPromise.then(g => grill = g);
-
-    userPromise.then(
-        u => user = u,
-        err => next(err)
-    )
-
-    await grillPromise;
-    await userPromise;
-
-    grill.renter = user;
-    grill.save();
+        grillModel.renter = userModel
+        grillModel.save()
+    })
 }
+
 
 function getGrill(name = "dania1") {
     var promise = Grill.findOne({name: name}).exec();

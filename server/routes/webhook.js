@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var DBGrillFactory = require('../db/grill.factory')
+var router = express.Router()
 
 // Set your secret key. Remember to switch to your live secret key in production!
 const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
@@ -35,8 +36,14 @@ router.post('/', bodyParser.raw({type: 'application/json'}), (req, res) => {
 });
 
 function handleCheckoutSession(session){
-    console.log(`User: ${session.client_reference_id} has completed payment`);
-    // Post to grill that it is rented
+    grill = {name: session.metadata.grill_name}
+    user = {username: session.metadata.user_username}
+    
+    //Post new renter to database
+    DBGrillFactory.updateGrillRenter(grill, user)
+    .then(() => console.log("Grill renter updated"))
+    .catch(err => console.log("Failed to update grill renter " + err.message))
+
 }
   
 

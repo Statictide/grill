@@ -2,14 +2,6 @@
 var mongoose = require('mongoose');
 var User = require('./userSchema.js');
 
-//Set up default mongoose connection
-const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {console.log("MongoDB connected!")});
-
 exports.getUsers = getUsers;
 exports.getUser = getUser;
 exports.postUser = postUser;

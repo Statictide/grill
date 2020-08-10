@@ -1,10 +1,11 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+var createError = require('http-errors')
+var express = require('express')
+var path = require('path')
 var bodyParser = require('body-parser')
-var multer = require('multer');
-var upload = multer();
-var session = require('express-session');
+var multer = require('multer')
+var upload = multer()
+var session = require('express-session')
+var mongoose = require('mongoose')
 
 //Routes
 var thingsRouter = require('./routes/things');
@@ -22,12 +23,19 @@ app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(upload.array());
-app.use(session({
+app.use(session({ 
   secret: "Your secret key",
   resave: false,
   saveUninitialized: false
   //store: sessionStore, // connect-mongo session store
 }));
+
+//Set up default mongoose connection
+const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {console.log("MongoDB connected!")});
 
 // Logging 
 app.use((req, res, next) => {
@@ -63,7 +71,6 @@ app.use((err, req, res, next) => {
   res.render('error');
 
   console.log(err.message);
-  console.log(err.stack);
 });
 
 module.exports = app;

@@ -9,7 +9,7 @@ router.get('/id', async (req, res, next) => {
         return next(HttpError(401, "Please log in first"));
     }
 
-    UserFactory.getGrillCheckoutSessionId(req.session.user).then(
+    UserFactory.getGrillCheckoutSessionId({name: "dania1"}, req.session.user).then(
         session => res.json({session_id: session.id}),
         err => next(HttpError(503, "Stripe failed, try again later" + err.message))
     );

@@ -5,10 +5,14 @@ exports.getGrillCheckoutSessionId = getGrillCheckoutSessionId;
 exports.createCustomer = createCustomer;
 
 //Session.user
-function getGrillCheckoutSessionId(user) {
+function getGrillCheckoutSessionId(grill, user) {
     return new Promise((resolve, reject) => {
         stripe.checkout.sessions.create({
             client_reference_id: user.username,
+            metadata: {
+                grill_name: grill.name,
+                user_username: user.username,
+            },
             customer: user.stripe_customer,
             payment_method_types: ['card'],
             line_items: [{

@@ -20,6 +20,14 @@ router.get("/grills", (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.get('/rent', (req, res) => {
+    if (!req.session.user){
+        return res.send("Please log in")
+    }
+
+    DBGrillFactory.updateGrillRenter({name: "dania1"}, req.session.user)
+    .then(res.send("Sucessfully updated"))
+})
 
 
 module.exports = router;
