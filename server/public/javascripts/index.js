@@ -13,10 +13,21 @@ window.onload = function() {
     });
 };
 
-function openGrillBox(grill) {
+function openGrillBox(grill_name) {
     var xhttp = new XMLHttpRequest();
-        
-    xhttp.open("PUT", "http://localhost:3000/grills/" + grill.name, true);
-    xhttp.setRequestHeader("open", true)
-    xhttp.send();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //document.getElementById("demo").innerHTML = this.responseText;
+            console.log(this.responseText);
+        }
+    };
+
+    let json = JSON.stringify({
+        open: true,
+      });
+    
+    xhttp.open("PUT", "http://localhost:3000/grills/" + grill_name, true);
+    xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhttp.send(json);
 }

@@ -32,7 +32,9 @@ router.get("/grills/:name", (req, res, next) => {
 })
 
 router.put("/grills/:name", (req, res, next) => {
-    res.send("Hello world!")
+    if (req.body.open) {
+        console.log("Opening box!")
+    }
 })
 
 

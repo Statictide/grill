@@ -10,9 +10,9 @@ html
   body
     block header 
       if(user)
-        h1 Hello #{user.username}
         a(href="/logout") Logout
         a(href="/users") Users
+        h1 Hello #{user.username}
         
       else
         a(href="/login") Login
