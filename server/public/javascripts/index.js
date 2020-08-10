@@ -12,3 +12,11 @@ window.onload = function() {
         .catch(err => alert(err.message))
     });
 };
+
+function openGrillBox(grill) {
+    var xhttp = new XMLHttpRequest();
+        
+    xhttp.open("PUT", "http://localhost:3000/grills/" + grill.name, true);
+    xhttp.setRequestHeader("open", true)
+    xhttp.send();
+}

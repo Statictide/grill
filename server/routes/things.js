@@ -6,23 +6,36 @@ var HttpError = require('http-errors');
 
 router.get('/', (req, res) => {
     var user = req.session.user
-    var grill = {name: "dania1"}
-    if (user) {
 
+    if (!user) {
+        return res.render('index');
     }
-    res.render('index', {user: req.session.user});
+
+
+    //Check wich grills are rented by user
+    DBFactory.getRentedGrills(user)
+    .then(grills => {
+        obj = {
+            user: user,
+            rented_grills: grills,
+        }
+
+        return res.render('index', obj)
+    })
 });
 
-
-router.get('/success', (req, res) => {
-    res.render('sucess', {user: req.session.user});
-});
-
-router.get("/grills", (req, res) => {
-    DBFactory.getGrill("dania1")
+router.get("/grills/:name", (req, res, next) => {
+    grill = {name: req.params.name}
+    DBFactory.getGrill(grill)
     .then(grill => res.json(grill))
-    .catch(err => console.log(err));
-});
+    .catch(err => next(HttpError(500, err.message)))
+})
+
+router.put("/grills/:name", (req, res, next) => {
+    res.send("Hello world!")
+})
+
+
 
 router.get('/clear', (req, res, next) => {
     DBFactory.clearGrillRenter({name: "dania1"})

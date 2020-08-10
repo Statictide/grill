@@ -11,7 +11,6 @@ router.get("/login", (req, res) => {
 
 //Req body should contain username
 router.post('/login', (req, res, next) => {
-    console.log(JSON.stringify(req.body))
     // username must be set
     if(!req.body.username) {
         return res.render("login", {

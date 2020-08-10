@@ -26,7 +26,7 @@ function getGrillCheckoutSessionId(grill, user) {
                 quantity: 1,
             }],
             mode: 'payment',
-            success_url:'http://localhost:3000/success',
+            success_url:'http://localhost:3000/',
             cancel_url: 'http://localhost:3000/',
         },
         function (err, session) {

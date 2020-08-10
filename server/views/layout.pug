@@ -12,9 +12,11 @@ html
       if(user)
         h1 Hello #{user.username}
         a(href="/logout") Logout
+        a(href="/users") Users
+        
       else
         a(href="/login") Login
+        a(href="/users") Users
 
-    a(href="/users") Users
-
+      
     block content

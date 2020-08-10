@@ -1,0 +1,3 @@
+Add rented grill ref to user document. Remove user ref from grill document
+Make stripe complete payment only after reserving grill
+Fjern stripe_customer_id fra session

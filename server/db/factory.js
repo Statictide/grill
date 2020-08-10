@@ -4,6 +4,7 @@ var {Grill, User} = require('./schema.js')
 
 exports.clearGrillRenter = clearGrillRenter;
 exports.updateGrillRenter = updateGrillRenter;
+exports.getRentedGrills = getRentedGrills;
 exports.getGrill = getGrill;
 exports.getUser = getUser;
 exports.getUsers = getUsers;
@@ -33,7 +34,23 @@ function updateGrillRenter(grill, user) {
     })
 }
 
-function getGrill(grill = {name: "dania1"}) {
+//Only finds "dania1" currently
+function getRentedGrills(user) {
+    return Promise.all([getUser(user), getGrill({name: "dania1"})])
+    .then(values => {
+        var user = values[0]
+        var grill = values[1]
+
+        var grills = []
+        if (grill.renter.equals(user._id)) {
+            grills.push(grill)
+        }
+
+        return grills
+    })
+}
+
+function getGrill(grill) {
     var promise = Grill.findOne(grill).exec()
     return promise;
 }
