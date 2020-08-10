@@ -3,11 +3,20 @@ var mongoose = require('mongoose')
 var DBUserFactory = require('./user.factory')
 var Grill = require('./grillSchema.js')
 
+exports.clearGrillRenter = clearGrillRenter;
 exports.updateGrillRenter = updateGrillRenter;
 exports.getGrill = getGrill;
 
+function clearGrillRenter(grill) {
+    return getGrill(grill)
+    .then(grillModel => {
+        grillModel.renter = null;
+        grillModel.save(err => console.log(err))
+    })
+}
+
 //grill.name, user.username should both exist
-async function updateGrillRenter(grill, user) {
+function updateGrillRenter(grill, user) {
     return Promise.all([
         //Get grill and user
         getGrill(grill),
@@ -22,8 +31,7 @@ async function updateGrillRenter(grill, user) {
     })
 }
 
-
-function getGrill(name = "dania1") {
-    var promise = Grill.findOne({name: name}).exec();
+function getGrill(grill = {name: "dania1"}) {
+    var promise = Grill.findOne(grill).exec()
     return promise;
 }

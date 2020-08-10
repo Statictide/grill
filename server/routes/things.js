@@ -20,13 +20,10 @@ router.get("/grills", (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.get('/rent', (req, res) => {
-    if (!req.session.user){
-        return res.send("Please log in")
-    }
-
-    DBGrillFactory.updateGrillRenter({name: "dania1"}, req.session.user)
-    .then(res.send("Sucessfully updated"))
+router.get('/clear', (req, res, next) => {
+    DBGrillFactory.clearGrillRenter({name: "dania1"})
+    .then(res.send("Sucessfully cleared"))
+    .catch(err => next(HttpError(500, err.message)))
 })
 
 
