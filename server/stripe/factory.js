@@ -5,7 +5,7 @@ const DBFactory = require('../db/factory');
 exports.getCheckoutSessionId = getCheckoutSessionId;
 exports.createCustomer = createCustomer;
 
-function createCheckoutSession(user_username, grill_name, customer) {
+function createCheckoutSession(user_username, customer, grill_name) {
     return new Promise((resolve, reject) => {
         stripe.checkout.sessions.create({
             client_reference_id: user_username,
@@ -38,9 +38,10 @@ function getCheckoutSessionId(user, grill) {
     return DBFactory.getUser(user)
     .then(userModel => {
         return createCheckoutSession(
-            user.username, 
-            grill.name, 
-            userModel.customer)
+            userModel.username, 
+            userModel.stripe_customer,
+            grill.name,
+        )
     })
     
 }

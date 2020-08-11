@@ -26,8 +26,8 @@ router.post('/login', (req, res, next) => {
         else 
             return createUser(req)
     })
-    .then(user => {
-        req.session.user = {username: user.username, stripe_customer: user.stripe_customer};
+    .then(userModel => {
+        req.session.user = {username: userModel.username, _id: userModel._id};
         return res.redirect("/"); 
     })
     .catch(err => {
