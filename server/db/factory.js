@@ -12,9 +12,10 @@ exports.postUser = postUser;
 
 function clearGrillRenter(grill) {
     return getGrill(grill)
-    .then(grillModel => {
+    .then(grillModel => {   
         grillModel.renter = null;
         grillModel.save(err => console.log(err))
+        console.log(`Cleared renter of${JSON.stringify(grill)}`)
     })
 }
 
@@ -36,7 +37,7 @@ function updateGrillRenter(grill, user) {
 
 //Only finds "dania1" currently
 function getRentedGrills(user) {
-    return Promise.all([getUser(user), getGrill({name: "dania1"})])
+    return Promise.all([getUser(user), getGrill({})])
     .then(values => {
         var user = values[0]
         var grill = values[1]
@@ -51,18 +52,34 @@ function getRentedGrills(user) {
 }
 
 function getGrill(grill) {
-    var promise = Grill.findOne(grill).exec()
-    return promise;
+    return Grill.findOne(grill).exec()
+    .then(grillModel => {
+        if (!grillModel) {
+            throw new Error(`getGrill: No grill found matching ${JSON.stringify(grill)}`)
+        }
+
+        return grillModel
+    })
 }
 
 function getUsers() {
-    var promise = User.find({}).exec();
-    return promise;
+    return User.find({}).exec()
+    .then(userModel => {
+        if (!userModel) 
+            throw new Error("getUsers: None found")
+        else 
+            return userModel
+    })
 }
 
 function getUser(req) {
-    var promise = User.findOne(req.body).exec();
-    return promise;
+    return User.findOne(req.body).exec()
+    .then(userModel => {
+        if (!userModel) 
+            throw new Error("getUsers: None found")
+        else 
+            return userModel
+    })
 }
 
 function postUser(user) {

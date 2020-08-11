@@ -11,6 +11,7 @@ block content
         each grill in rented_grills
             h3 #{grill.name}
             button(onclick=`openGrillBox("${grill.name}")`) Open
+            button(onclick=`releaseGrill("${grill.name}")`) Release
     
         h4 Please rent the grill to open the box
         h4 The price is 5DKK
