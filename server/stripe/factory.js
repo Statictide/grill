@@ -1,19 +1,16 @@
 // Set your secret key. Remember to switch to your live secret key in production!
 const stripe = require('stripe')('sk_test_51H4hdCKXVCnO2pJVhwskX2q0fTD1PUvMHVkm62cC9PBfifyvqiYpLTSmVVjYkvo2G8z7MSskdE3agf7oRAh308yc00nsBZgXMJ');
+const DBFactory = require('../db/factory');
 
-exports.getGrillCheckoutSessionId = getGrillCheckoutSessionId;
+exports.getCheckoutSessionId = getCheckoutSessionId;
 exports.createCustomer = createCustomer;
 
-//Session.user
-function getGrillCheckoutSessionId(grill, user) {
+function createCheckoutSession(user_username, grill_name, customer) {
     return new Promise((resolve, reject) => {
         stripe.checkout.sessions.create({
-            client_reference_id: user.username,
-            metadata: {
-                grill_name: grill.name,
-                user_username: user.username,
-            },
-            customer: user.stripe_customer,
+            client_reference_id: user_username,
+            metadata: {user_username, grill_name},
+            customer: customer,
             payment_method_types: ['card'],
             line_items: [{
                 price_data: {
@@ -34,6 +31,18 @@ function getGrillCheckoutSessionId(grill, user) {
             resolve(session);
         });
     });
+}
+
+//Session.user
+function getCheckoutSessionId(user, grill) {
+    return DBFactory.getUser(user)
+    .then(userModel => {
+        return createCheckoutSession(
+            user.username, 
+            grill.name, 
+            userModel.customer)
+    })
+    
 }
 
 // User = {username}
