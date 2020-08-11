@@ -2,19 +2,19 @@
 var mongoose = require('mongoose')
 var {Grill, User} = require('./schema.js')
 
-exports.clearGrillRenter = clearGrillRenter;
+exports.clearRental = clearRental;
 exports.updateGrillRenter = updateGrillRenter;
-exports.getRentedGrills = getRentedGrills;
+exports.getRentedGrill = getRentedGrill;
 exports.getGrill = getGrill;
 exports.getUser = getUser;
 exports.getUsers = getUsers;
 exports.postUser = postUser;
 
-function clearGrillRenter(grill) {
-    return getGrill(grill)
-    .then(grillModel => {   
-        grillModel.renter = null;
-        grillModel.save(err => console.log(err))
+function clearRental(user) {
+    return getUser(user)
+    .then(userModel => {   
+        userModel.rented_grill = null;
+        userModel.save()
         console.log(`Cleared renter of${JSON.stringify(grill)}`)
     })
 }
@@ -32,35 +32,22 @@ function updateGrillRenter(grill, user) {
 
         grillModel.renter = userModel
         grillModel.save()
+
+        userModel.rented_grill = grillModel
+        userModel.save()
     })
 }
 
-//Only finds one grill currently
-function getRentedGrills(user) {
-    return Promise.all([getUser(user), getGrill({})])
-    .then(values => {
-        var user = values[0]
-        var grill = values[1]
-
-        var grills = []
-        if (user._id.equals(grill.renter)) {
-            grills.push(grill)
-        }
-
-        return grills
+//Returns rented grill model, undefined otherwise
+function getRentedGrill(user) {
+    return getUser(user)
+    .then(userModel => {
+        return getGrill({_id: userModel.rented_grill})
     })
 }
 
 function getGrill(grill) {
     return Grill.findOne(grill).exec()
-    .then(grillModel => {
-        //Throw error none found
-        if (!grillModel) {
-            throw new Error(`getGrill: No grill found matching ${JSON.stringify(grill)}`)
-        }
-         
-        return grillModel
-    })
 }
 
 function getUsers() {

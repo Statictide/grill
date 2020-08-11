@@ -4,7 +4,7 @@ var DBFactory = require('../db/factory');
 var StripeFactory = require('../stripe/factory');
 var HttpError = require('http-errors');
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     var user = req.session.user
 
     if (!user) {
@@ -13,15 +13,13 @@ router.get('/', (req, res) => {
 
 
     //Check wich grills are rented by user
-    DBFactory.getRentedGrills(user)
-    .then(grills => {
-        obj = {
-            user: user,
-            rented_grills: grills,
-        }
-
+    DBFactory.getRentedGrill(user)
+    .then(grillModel => {
+        obj = {user: user, rented_grill: grillModel}
         return res.render('index', obj)
     })
+    .catch(err => next(HttpError(500, err.message)))
+
 });
 
 router.get("/grills/:name", (req, res, next) => {
@@ -34,18 +32,15 @@ router.get("/grills/:name", (req, res, next) => {
 //TODO: only do this if session.user matches
 router.put("/grills/:name", (req, res, next) => {
     grill = {name: req.params.name}
-    console.log(grill)
 
     if (req.body.open) {
-        console.log("Opening box!")
+        console.log("Opening box! Not implemented")
         res.sendStatus(200)
     }
 
     if (req.body.release) {
-        DBFactory.clearGrillRenter(grill)
-        .then(() => {
-            res.sendStatus(200)
-        })
+        DBFactory.clearRental(grill)
+        .then(() => res.sendStatus(200))
         .catch(err => next(HttpError(500, err.message)))
     }
 })

@@ -7,12 +7,10 @@ block content
     if (!user) 
         h4 Please log in
     else
-        h1 You are renting the following grills
-        each grill in rented_grills
-            h3 #{grill.name}
-            button(onclick=`openGrillBox("${grill.name}")`) Open
-            button(onclick=`releaseGrill("${grill.name}")`) Release
-    
-        h4 Please rent the grill to open the box
-        h4 The price is 5DKK
-        button(id="checkout-button") Pay
+        if (rented_grill)
+            h4 #{rented_grill.name}
+            button(onclick=`openGrillBox("${rented_grill.name}")`) Open
+            button(onclick=`releaseGrill("${rented_grill.name}")`) Release
+        else 
+            h4 Please rent the grill. The price is 5DKK.
+            button(id="checkout-button") Pay

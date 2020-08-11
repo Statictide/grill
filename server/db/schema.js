@@ -8,6 +8,7 @@ var Grill = new mongoose.Schema({
 var User = new mongoose.Schema({
     username: {type: String, required : true},
     stripe_customer: String,
+    rented_grill: {type: mongoose.Schema.Types.ObjectId, ref: 'Grill'},
 })
 
 module.exports = {
