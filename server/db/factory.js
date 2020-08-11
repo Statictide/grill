@@ -35,7 +35,7 @@ function updateGrillRenter(grill, user) {
     })
 }
 
-//Only finds "dania1" currently
+//Only finds one grill currently
 function getRentedGrills(user) {
     return Promise.all([getUser(user), getGrill({})])
     .then(values => {
@@ -43,7 +43,7 @@ function getRentedGrills(user) {
         var grill = values[1]
 
         var grills = []
-        if (grill.renter.equals(user._id)) {
+        if (user._id.equals(grill.renter)) {
             grills.push(grill)
         }
 
@@ -54,10 +54,11 @@ function getRentedGrills(user) {
 function getGrill(grill) {
     return Grill.findOne(grill).exec()
     .then(grillModel => {
+        //Throw error none found
         if (!grillModel) {
             throw new Error(`getGrill: No grill found matching ${JSON.stringify(grill)}`)
         }
-
+         
         return grillModel
     })
 }
@@ -65,16 +66,19 @@ function getGrill(grill) {
 function getUsers() {
     return User.find({}).exec()
     .then(userModel => {
-        if (!userModel) 
+        //Throw error none found
+        if (!userModel) {
             throw new Error("getUsers: None found")
-        else 
-            return userModel
+        }
+         
+        return userModel
     })
 }
 
 function getUser(req) {
     return User.findOne(req.body).exec()
     .then(userModel => {
+        //Throw error none found
         if (!userModel) 
             throw new Error("getUsers: None found")
         else 

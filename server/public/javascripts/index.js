@@ -39,6 +39,7 @@ function releaseGrill(grill_name) {
         if (this.readyState == 4 && this.status == 200) {
             //document.getElementById("demo").innerHTML = this.responseText;
             console.log(this.responseText);
+            location.reload()
         }
     };
 

@@ -35,23 +35,19 @@ router.get("/grills/:name", (req, res, next) => {
 router.put("/grills/:name", (req, res, next) => {
     grill = {name: req.params.name}
     console.log(grill)
+
     if (req.body.open) {
         console.log("Opening box!")
+        res.sendStatus(200)
     }
 
     if (req.body.release) {
         DBFactory.clearGrillRenter(grill)
-        .then(() => console.log(`Cleared ${JSON.stringify(grill)}`))
-        .then(() => res.send("Sucessfully cleared"))
+        .then(() => {
+            res.sendStatus(200)
+        })
         .catch(err => next(HttpError(500, err.message)))
     }
-})
-
-
-
-router.get('/clear', (req, res, next) => {
-    DBFactory.clearGrillRenter({name: "dania1"})
-    .then(res.send("Sucessfully cleared"))
 })
 
 
