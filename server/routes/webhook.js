@@ -10,7 +10,7 @@ const endpointSecret = "whsec_sCFRdbZbg7kK79KOX8FhrgLO9wAI8K2l";
 const bodyParser = require('body-parser');
 
 // Match the raw body to content type application/json
-router.post('/', bodyParser.raw({type: 'application/json'}), (req, res) => {
+router.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
     const sig = req.headers['stripe-signature'];
     
     let event;
@@ -36,8 +36,8 @@ router.post('/', bodyParser.raw({type: 'application/json'}), (req, res) => {
 });
 
 function handleCheckoutSession(session){
-    grill = {name: session.metadata.grill_name}
-    user = {username: session.metadata.user_username}
+    grill = {_id: session.metadata.grill_id}
+    user = {_id: session.metadata.user_id}
     
     //Post new renter to database
     DBGrillFactory.updateGrillRenter(grill, user)

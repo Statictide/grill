@@ -9,8 +9,8 @@ block content
     else
         if (rented_grill)
             h4 #{rented_grill.name}
-            button(onclick=`openGrillBox("${rented_grill.name}")`) Open
-            button(onclick=`releaseGrill("${rented_grill.name}")`) Release
+            button(onclick=`openGrillBox("${rented_grill._id}")`) Open
+            button(onclick=`releaseGrill("${rented_grill._id}")`) Release
         else 
             h4 Please rent the grill. The price is 5DKK.
             button(id="checkout-button") Pay

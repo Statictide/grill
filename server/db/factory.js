@@ -6,6 +6,7 @@ exports.clearRental = clearRental;
 exports.updateGrillRenter = updateGrillRenter;
 exports.getRentedGrill = getRentedGrill;
 exports.getGrill = getGrill;
+exports.getGrills = getGrills;
 exports.getUser = getUser;
 exports.getUsers = getUsers;
 exports.postUser = postUser;
@@ -15,39 +16,45 @@ function clearRental(user) {
     .then(userModel => {   
         userModel.rented_grill = null;
         userModel.save()
-        console.log(`Cleared renter of${JSON.stringify(grill)}`)
     })
 }
 
 //grill.name, user.username should both exist
 function updateGrillRenter(grill, user) {
-    return Promise.all([
-        //Get grill and user
-        getGrill(grill),
-        getUser(user)])
+    //Get grill and user
+    return Promise.all([getGrill(grill), getUser(user)])
+    //Then update database with new renter
     .then(values => {
-        //Then update database with new renter
         grillModel = values[0]
         userModel = values[1]
-
-        grillModel.renter = userModel
-        grillModel.save()
 
         userModel.rented_grill = grillModel
         userModel.save()
     })
 }
 
-//Returns rented grill model, undefined otherwise
+//Returns rented grill model, null otherwise
 function getRentedGrill(user) {
     return getUser(user)
     .then(userModel => {
-        return getGrill({_id: userModel.rented_grill})
+        if(!userModel.rented_grill) {
+            return null
+        }
+
+        return getGrill(userModel.rented_grill)
     })
 }
 
 function getGrill(grill) {
     return Grill.findOne(grill).exec()
+    .then(grillModel => {
+        console.log(`${JSON.stringify(grillModel)}`)
+        return grillModel
+    })
+}
+
+function getGrills(grill) {
+    return Grill.find(grill).exec()
 }
 
 function getUsers() {

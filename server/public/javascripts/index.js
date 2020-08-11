@@ -13,7 +13,7 @@ window.onload = function() {
     });
 };
 
-function openGrillBox(grill_name) {
+function openGrillBox(grill_id) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
@@ -27,12 +27,12 @@ function openGrillBox(grill_name) {
         open: true,
     });
     
-    xhttp.open("PUT", "http://localhost:3000/grills/" + grill_name, true);
+    xhttp.open("PUT", "http://localhost:3000/grills/" + grill_id, true);
     xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhttp.send(json);
 }
 
-function releaseGrill(grill_name) {
+function releaseGrill(grill_id) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
@@ -47,7 +47,7 @@ function releaseGrill(grill_name) {
         release: true,
     });
     
-    xhttp.open("PUT", "http://localhost:3000/grills/" + grill_name, true);
+    xhttp.open("PUT", "http://localhost:3000/grills/" + grill_id, true);
     xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhttp.send(json);
 }

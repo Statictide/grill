@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 });
 
 //Webhook needs the raw body
-app.use('/webhook', webhookRouter);
+app.use('/', webhookRouter);
 app.use(bodyParser.json());
 
 app.use('/', thingsRouter);

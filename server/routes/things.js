@@ -22,6 +22,12 @@ router.get('/', (req, res, next) => {
 
 });
 
+router.get('/grills', (req, res, next) => {
+    DBFactory.getGrills({})
+    .then(grill => res.json(grill))
+    .catch(err => next(HttpError(500, err.message)))
+})
+
 router.get("/grills/:name", (req, res, next) => {
     grill = {name: req.params.name}
     DBFactory.getGrill(grill)
@@ -30,8 +36,9 @@ router.get("/grills/:name", (req, res, next) => {
 })
 
 //TODO: only do this if session.user matches
-router.put("/grills/:name", (req, res, next) => {
-    grill = {name: req.params.name}
+router.put("/grills/:_id", (req, res, next) => {
+    var user = req.session.user
+    var grill = {_id: req.params._id}
 
     if (req.body.open) {
         console.log("Opening box! Not implemented")

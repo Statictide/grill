@@ -10,7 +10,7 @@ router.get('/id', async (req, res, next) => {
     }
 
     user = req.session.user
-    grill = {name: "dania1"}
+    grill = {_id: "5f2bdb329316ecd0c824cd01", name: "dania1"}
 
     UserFactory.getCheckoutSessionId(user, grill)
     .then(session => res.json({session_id: session.id}))

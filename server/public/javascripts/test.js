@@ -8,7 +8,7 @@ client.onMessageArrived = onMessageArrived;
 // connect the client
 client.connect({onSuccess:onConnect});
 
-topic_root = "dk.daniakollegiet.markgrill"
+topic_root = "dk.daniakollegiet.sierra.dania1"
 // called when the client connects
 function onConnect() {
   // Once a connection has been made, make a subscription and send a message.
