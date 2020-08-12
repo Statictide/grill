@@ -1,19 +1,21 @@
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var bodyParser = require('body-parser')
-var multer = require('multer')
-var upload = multer()
-var session = require('express-session')
-var mongoose = require('mongoose')
+const createError = require('http-errors')
+const express = require('express')
+const path = require('path')
+const bodyParser = require('body-parser')
+const multer = require('multer')
+const upload = multer()
+const session = require('express-session')
+const mongoose = require('mongoose')
+const tmp = require('./mqtt/factory')
+
 
 //Routes
-var thingsRouter = require('./routes/things');
-var authRouter = require('./routes/auth');
-var idRouter = require('./routes/id');
-var webhookRouter = require('./routes/webhook');
+const thingsRouter = require('./routes/things');
+const authRouter = require('./routes/auth');
+const idRouter = require('./routes/id');
+const webhookRouter = require('./routes/webhook');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,7 +35,7 @@ app.use(session({
 //Set up default mongoose connection
 const uri = "mongodb+srv://user_0:123@cluster0.isosq.mongodb.net/Cluster0?retryWrites=true&w=majority";
 mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {console.log("MongoDB connected!")});
 
