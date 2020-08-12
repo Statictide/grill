@@ -11,7 +11,7 @@ exports.getUser = getUser;
 exports.getUsers = getUsers;
 exports.postUser = postUser;
 
-function clearRental(user) {
+function clearRental(grill, user) {
     return getUser(user)
     .then(userModel => {   
         userModel.rented_grill = null;
@@ -45,12 +45,14 @@ function getRentedGrill(user) {
     })
 }
 
+
+
+
+
+
+
 function getGrill(grill) {
     return Grill.findOne(grill).exec()
-    .then(grillModel => {
-        console.log(`${JSON.stringify(grillModel)}`)
-        return grillModel
-    })
 }
 
 function getGrills(grill) {
@@ -69,8 +71,8 @@ function getUsers() {
     })
 }
 
-function getUser(req) {
-    return User.findOne(req.body).exec()
+function getUser(user) {
+    return User.findOne(user).exec()
     .then(userModel => {
         //Throw error none found
         if (!userModel) 

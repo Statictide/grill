@@ -18,7 +18,7 @@ router.post('/login', (req, res, next) => {
             user: req.session.user})
     }
     
-    DBFactory.getUser(req)
+    DBFactory.getUser(req.body)
     // If user is found, pass it on. Otherwise create user first
     .then(userModel => {
         if (userModel) 
@@ -30,9 +30,7 @@ router.post('/login', (req, res, next) => {
         req.session.user = {username: userModel.username, _id: userModel._id};
         return res.redirect("/"); 
     })
-    .catch(err => {
-        next(HttpError(500, err.message));
-    });
+    .catch(err => next(HttpError(500, err.message)))
 });
 
 // Requires req.body.username
@@ -46,7 +44,7 @@ function createUser(req) {
         };
     })
     // Post user to database
-    .then(user => DBFactory.postUser(user)) //This promise is dynamically inserted into the chain
+    .then(user => DBFactory.postUser(user))
 }
 
 router.get('/logout', (req, res) => {

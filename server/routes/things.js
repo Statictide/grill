@@ -40,16 +40,24 @@ router.put("/grills/:_id", (req, res, next) => {
     var user = req.session.user
     var grill = {_id: req.params._id}
 
-    if (req.body.open) {
-        console.log("Opening box! Not implemented")
-        res.sendStatus(200)
-    }
-
-    if (req.body.release) {
-        DBFactory.clearRental(grill)
-        .then(() => res.sendStatus(200))
-        .catch(err => next(HttpError(500, err.message)))
-    }
+    //Check authentication
+    DBFactory.getUser(user)
+    .then(userModel => {
+        if (!userModel.rented_grill.equals(grill._id)) {
+            throw new Error("Unauthorized")
+        }
+    })
+    .then(() => {
+        if (req.body.open) {
+            //Do stuff
+        }
+    
+        if (req.body.release) {
+            return DBFactory.clearRental(grill, user)
+        }
+    })
+    .then(() => res.sendStatus(200)) //OK
+    .catch(err => next(HttpError(500, err.message)))
 })
 
 
